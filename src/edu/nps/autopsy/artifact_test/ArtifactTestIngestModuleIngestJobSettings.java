@@ -21,11 +21,11 @@ import org.sleuthkit.autopsy.ingest.IngestModuleIngestJobSettings;
 /**
  * no Ingest job options
  */
-public class ArtifactTestIngestJobSettings implements IngestModuleIngestJobSettings {
+public class ArtifactTestIngestModuleIngestJobSettings implements IngestModuleIngestJobSettings {
     
     private static final long serialVersionUID = 1L;
 
-    ArtifactTestIngestJobSettings() {
+    ArtifactTestIngestModuleIngestJobSettings() {
     }
 
     @Override

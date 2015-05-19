@@ -14,36 +14,21 @@
 //
 // Released into the public domain on April 28, 2015 by Bruce Allen.
 
-package edu.nps.autopsy.hashdb.blacklist;
+package edu.nps.autopsy.artifact_test;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.sleuthkit.autopsy.casemodule.Case;
-import org.sleuthkit.autopsy.coreutils.ExecUtil;
 import org.sleuthkit.autopsy.coreutils.Logger;
-import org.sleuthkit.autopsy.coreutils.MessageNotifyUtil;
 import org.sleuthkit.autopsy.ingest.DataSourceIngestModule;
-import org.sleuthkit.autopsy.ingest.DataSourceIngestModuleProcessTerminator;
 import org.sleuthkit.autopsy.ingest.DataSourceIngestModuleProgress;
 import org.sleuthkit.autopsy.ingest.IngestJobContext;
-import org.sleuthkit.autopsy.ingest.IngestMessage;
 import org.sleuthkit.autopsy.ingest.IngestModuleReferenceCounter;
 import org.sleuthkit.autopsy.ingest.IngestServices;
-import org.sleuthkit.autopsy.ingest.ModuleDataEvent;
 import org.sleuthkit.datamodel.BlackboardArtifact;
-import org.sleuthkit.datamodel.BlackboardArtifact.ARTIFACT_TYPE;
 import org.sleuthkit.datamodel.BlackboardAttribute;
 import org.sleuthkit.datamodel.Content;
 import org.sleuthkit.datamodel.Image;
@@ -92,28 +77,28 @@ logger.log(Level.INFO, "startup.c");
     private synchronized void setArtifactAndAttribute() throws IngestModuleException {
 logger.log(Level.INFO, "setArtifactAndAttribute.a");
         if (artifactID == -1) {
-logger.log(Level.INFO, "startup.d");
+logger.log(Level.INFO, "setArtifactAndAttribute.b");
             try {
                 // set up static variables
                 SleuthkitCase sleuthkitCase = Case.getCurrentCase().getSleuthkitCase();
                 artifactID = sleuthkitCase.getArtifactTypeID("ARTIFACT_TEST");
 
                 if (artifactID == -1) {
-logger.log(Level.INFO, "startup.e");
+logger.log(Level.INFO, "setArtifactAndAttribute.c");
 
                     // add artifact and attribute to Sleuthkit
                     artifactID = sleuthkitCase.addArtifactType("ARTIFACT_TEST", "Artifact for Artifact Test");
-
+logger.log(Level.INFO, "setArtifactAndAttribute.d");
                     attributeID = sleuthkitCase.addAttrType("ATTRIBUTE_TEST", "Attribute for Artifact Test");
-logger.log(Level.INFO, "startup.f");
+logger.log(Level.INFO, "setArtifactAndAttribute.e");
                 } else {
-logger.log(Level.INFO, "startup.g");
+logger.log(Level.INFO, "setArtifactAndAttribute.f");
                     // get attribute values
                     attributeID = sleuthkitCase.getAttrTypeID("ATTRIBUTE_TEST");
                 }
-logger.log(Level.INFO, "startup.h");
+logger.log(Level.INFO, "setArtifactAndAttribute.g");
             } catch (TskCoreException ex) {
-logger.log(Level.INFO, "startup.TskCoreException catch");
+logger.log(Level.INFO, "setArtifactAndAttribute.TskCoreException catch");
                 IngestServices ingestServices = IngestServices.getInstance();
                 logger.log(Level.SEVERE, "Failed to create blackboard artifact or attribute", ex);
                 artifactID = -1;
@@ -143,7 +128,7 @@ logger.log(Level.INFO, "process.a");
         // write the artifact
         progressBar.switchToDeterminate(1);
         progressBar.progress(0);
-        writeTheArtifact();
+        addTheArtifact(dataSource);
         progressBar.progress(1);
 
         return ProcessResult.OK;
@@ -154,10 +139,10 @@ logger.log(Level.INFO, "process.a");
 logger.log(Level.INFO, "process.addTheArtifact.a");
 
         // create the attribute
-        Collection<BlackboardAttribute> attributes = new ArrayList<>();
+        Collection<BlackboardAttribute> attributes = new ArrayList<BlackboardAttribute>();
         String dateAndTime = new SimpleDateFormat("MM-dd-yy-HH-mm-ss").format(new Date());
 
-        attributes.add(new BlackboardAttribute(attributeID, moduleName, "hello attribute at " + dateAndTime);
+        attributes.add(new BlackboardAttribute(attributeID, moduleName, "hello attribute at " + dateAndTime));
 
         // create and add the artifact
         try {
