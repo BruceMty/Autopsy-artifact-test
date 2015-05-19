@@ -65,15 +65,49 @@ logger.log(Level.INFO, "startup.a");
         if (refCounter.incrementAndGet(context.getJobId()) != 1) {
             // do not run twice.  Can it?
             logger.log(Level.SEVERE, "ArtifactTestIngestModule.startUp count is bad");
-            return;
+            throw new IngestModuleException("ArtifactTestIngestModule.startUp count is bad");
         }
         
 logger.log(Level.INFO, "startup.b");
         // establish the blackboard artifact and its attribute
-        setArtifactAndAttribute();
+//        setArtifactAndAttribute();
+        setExistingArtifactAndAttribute();
 logger.log(Level.INFO, "startup.c");
     }
     
+    private synchronized void setExistingArtifactAndAttribute() throws IngestModuleException {
+logger.log(Level.INFO, "setExistingArtifactAndAttribute.a");
+        if (artifactID == -1) {
+logger.log(Level.INFO, "setExistingArtifactAndAttribute.b");
+            try {
+                // set up static variables
+                SleuthkitCase sleuthkitCase = Case.getCurrentCase().getSleuthkitCase();
+                artifactID = sleuthkitCase.getArtifactTypeID("TSK_WEB_DOWNLOAD");
+
+                if (artifactID == -1) {
+logger.log(Level.INFO, "setExistingArtifactAndAttribute.c");
+                    throw new IngestModuleException("ArtifactTestIngestModule artifact ID is bad");
+                } else {
+logger.log(Level.INFO, "setExistingArtifactAndAttribute.d");
+                    // get attribute values
+                    attributeID = sleuthkitCase.getAttrTypeID("TSK_PATH_SOURCE");
+                    if (artifactID == -1) {
+logger.log(Level.INFO, "setExistingArtifactAndAttribute.e");
+                        throw new IngestModuleException("ArtifactTestIngestModule attribute ID is bad");
+                    }
+                }
+logger.log(Level.INFO, "setExistingArtifactAndAttribute.f");
+            } catch (TskCoreException ex) {
+logger.log(Level.INFO, "setExistingArtifactAndAttribute.TskCoreException catch");
+                IngestServices ingestServices = IngestServices.getInstance();
+                logger.log(Level.SEVERE, "Failed to create blackboard artifact or attribute", ex);
+                artifactID = -1;
+                attributeID = -1;
+                throw new IngestModuleException(ex.getLocalizedMessage());
+            }
+        }   
+    }
+
     private synchronized void setArtifactAndAttribute() throws IngestModuleException {
 logger.log(Level.INFO, "setArtifactAndAttribute.a");
         if (artifactID == -1) {
