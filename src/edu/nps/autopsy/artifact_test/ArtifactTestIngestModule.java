@@ -70,8 +70,8 @@ logger.log(Level.INFO, "startup.a");
         
 logger.log(Level.INFO, "startup.b");
         // establish the blackboard artifact and its attribute
-//        setArtifactAndAttribute();
-        setExistingArtifactAndAttribute();
+        setArtifactAndAttribute();
+//        setExistingArtifactAndAttribute();
 logger.log(Level.INFO, "startup.c");
     }
     
