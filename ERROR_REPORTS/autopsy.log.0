@@ -1,0 +1,38 @@
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.corecomponentinterfaces.CoreComponentControl closeCoreWindows
+INFO: tcName was null
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = Android Analyzer, version = 3.1.2
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = E01 Verifier, version = 3.1.2
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = Exif Parser, version = 3.1.2
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = Extension Mismatch Detector, version = 3.1.2
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = File Type Identification, version = 3.1.2
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = Hash Lookup, version = 3.1.2
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = Interesting Files Identifier, version = 3.1.2
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = PhotoRec Carver, version = 3.1.2
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = Archive Extractor, version = 3.1.2
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = Keyword Search, version = 3.1.2
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = Email Parser, version = 3.1.2
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = Recent Activity, version = 3.1.2
+May 20, 2015 10:12:18 AM org.sleuthkit.autopsy.ingest.IngestModuleFactoryLoader addFactory
+INFO: Found ingest module factory: name = Artifact Test Module, version = 1.0.0
+May 20, 2015 10:12:36 AM org.sleuthkit.autopsy.casemodule.AddImageTask commitImage
+INFO: Image committed, imageId: 1
+May 20, 2015 10:12:36 AM org.sleuthkit.autopsy.casemodule.AddImageTask commitImage
+INFO: Physical memory usage (max, total, free): 924844032, 184025088, 75816344
+JVM heap usage: init = 65011712(63488K) used = 108430848(105889K) committed = 184025088(179712K) max = 924844032(903168K), JVM non-heap usage: init = 2555904(2496K) used = 78856648(77008K) committed = 82534400(80600K) max = -1(-1K)
+Process Virtual Memory: 2,924,904,448
+May 20, 2015 10:12:41 AM org.sleuthkit.autopsy.ingest.IngestPipelinesConfiguration getInstance
+INFO: Creating ingest module loader instance
+May 20, 2015 10:12:41 AM edu.nps.autopsy.artifact_test.ArtifactTestIngestModule setArtifactAndAttribute
+INFO: checkpoint A
