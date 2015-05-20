@@ -61,78 +61,37 @@ public class ArtifactTestIngestModule implements DataSourceIngestModule {
     public void startUp(IngestJobContext context) throws IngestModuleException {
         this.context = context;
         this.logger = IngestServices.getInstance().getLogger(moduleName);
-logger.log(Level.INFO, "startup.a");
         if (refCounter.incrementAndGet(context.getJobId()) != 1) {
             // do not run twice.  Can it?
             logger.log(Level.SEVERE, "ArtifactTestIngestModule.startUp count is bad");
             throw new IngestModuleException("ArtifactTestIngestModule.startUp count is bad");
         }
         
-logger.log(Level.INFO, "startup.b");
         // establish the blackboard artifact and its attribute
-        setArtifactAndAttribute();
-//        setExistingArtifactAndAttribute();
-logger.log(Level.INFO, "startup.c");
+        setArtifactAndAttribute();            // fails
+        //setExistingArtifactAndAttribute();    // works fine
     }
     
-    private synchronized void setExistingArtifactAndAttribute() throws IngestModuleException {
-logger.log(Level.INFO, "setExistingArtifactAndAttribute.a");
-        if (artifactID == -1) {
-logger.log(Level.INFO, "setExistingArtifactAndAttribute.b");
-            try {
-                // set up static variables
-                SleuthkitCase sleuthkitCase = Case.getCurrentCase().getSleuthkitCase();
-                artifactID = sleuthkitCase.getArtifactTypeID("TSK_WEB_DOWNLOAD");
-
-                if (artifactID == -1) {
-logger.log(Level.INFO, "setExistingArtifactAndAttribute.c");
-                    throw new IngestModuleException("ArtifactTestIngestModule artifact ID is bad");
-                } else {
-logger.log(Level.INFO, "setExistingArtifactAndAttribute.d");
-                    // get attribute values
-                    attributeID = sleuthkitCase.getAttrTypeID("TSK_PATH_SOURCE");
-                    if (artifactID == -1) {
-logger.log(Level.INFO, "setExistingArtifactAndAttribute.e");
-                        throw new IngestModuleException("ArtifactTestIngestModule attribute ID is bad");
-                    }
-                }
-logger.log(Level.INFO, "setExistingArtifactAndAttribute.f");
-            } catch (TskCoreException ex) {
-logger.log(Level.INFO, "setExistingArtifactAndAttribute.TskCoreException catch");
-                IngestServices ingestServices = IngestServices.getInstance();
-                logger.log(Level.SEVERE, "Failed to create blackboard artifact or attribute", ex);
-                artifactID = -1;
-                attributeID = -1;
-                throw new IngestModuleException(ex.getLocalizedMessage());
-            }
-        }   
-    }
-
     private synchronized void setArtifactAndAttribute() throws IngestModuleException {
-logger.log(Level.INFO, "setArtifactAndAttribute.a");
         if (artifactID == -1) {
-logger.log(Level.INFO, "setArtifactAndAttribute.b");
             try {
                 // set up static variables
                 SleuthkitCase sleuthkitCase = Case.getCurrentCase().getSleuthkitCase();
                 artifactID = sleuthkitCase.getArtifactTypeID("ARTIFACT_TEST");
 
                 if (artifactID == -1) {
-logger.log(Level.INFO, "setArtifactAndAttribute.c");
 
                     // add artifact and attribute to Sleuthkit
+                    logger.log(Level.INFO, "checkpoint A");
                     artifactID = sleuthkitCase.addArtifactType("ARTIFACT_TEST", "Artifact for Artifact Test");
-logger.log(Level.INFO, "setArtifactAndAttribute.d");
+                    logger.log(Level.INFO, "checkpoint B");
                     attributeID = sleuthkitCase.addAttrType("ATTRIBUTE_TEST", "Attribute for Artifact Test");
-logger.log(Level.INFO, "setArtifactAndAttribute.e");
                 } else {
-logger.log(Level.INFO, "setArtifactAndAttribute.f");
                     // get attribute values
                     attributeID = sleuthkitCase.getAttrTypeID("ATTRIBUTE_TEST");
                 }
-logger.log(Level.INFO, "setArtifactAndAttribute.g");
+                logger.log(Level.INFO, "checkpoint C");
             } catch (TskCoreException ex) {
-logger.log(Level.INFO, "setArtifactAndAttribute.TskCoreException catch");
                 IngestServices ingestServices = IngestServices.getInstance();
                 logger.log(Level.SEVERE, "Failed to create blackboard artifact or attribute", ex);
                 artifactID = -1;
@@ -141,9 +100,34 @@ logger.log(Level.INFO, "setArtifactAndAttribute.TskCoreException catch");
         }   
     }
 
+    private synchronized void setExistingArtifactAndAttribute() throws IngestModuleException {
+        if (artifactID == -1) {
+            try {
+                // set up static variables
+                SleuthkitCase sleuthkitCase = Case.getCurrentCase().getSleuthkitCase();
+                artifactID = sleuthkitCase.getArtifactTypeID("TSK_WEB_DOWNLOAD");
+
+                if (artifactID == -1) {
+                    throw new IngestModuleException("ArtifactTestIngestModule artifact ID is bad");
+                } else {
+                    // get attribute values
+                    attributeID = sleuthkitCase.getAttrTypeID("TSK_PATH_SOURCE");
+                    if (artifactID == -1) {
+                        throw new IngestModuleException("ArtifactTestIngestModule attribute ID is bad");
+                    }
+                }
+            } catch (TskCoreException ex) {
+                IngestServices ingestServices = IngestServices.getInstance();
+                logger.log(Level.SEVERE, "Failed to create blackboard artifact or attribute", ex);
+                artifactID = -1;
+                attributeID = -1;
+                throw new IngestModuleException(ex.getLocalizedMessage());
+            }
+        }
+    }
+
     @Override
     public ProcessResult process(Content dataSource, DataSourceIngestModuleProgress progressBar) {
-logger.log(Level.INFO, "process.a");
         this.progressBar = progressBar;
 
         // skip if startUp was called more than once
@@ -170,24 +154,18 @@ logger.log(Level.INFO, "process.a");
 
     // add the artifact
     private ProcessResult addTheArtifact(Content dataSource) {
-logger.log(Level.INFO, "process.addTheArtifact.a");
 
         // create the attribute
         Collection<BlackboardAttribute> attributes = new ArrayList<BlackboardAttribute>();
         String dateAndTime = new SimpleDateFormat("MM-dd-yy-HH-mm-ss").format(new Date());
-
         attributes.add(new BlackboardAttribute(attributeID, moduleName, "hello attribute at " + dateAndTime));
 
         // create and add the artifact
         try {
-logger.log(Level.INFO, "process.addTheArtifact.b");
             BlackboardArtifact blackboardArtifact = dataSource.newArtifact(artifactID);
-logger.log(Level.INFO, "process.addTheArtifact.c");
             blackboardArtifact.addAttributes(attributes);
-logger.log(Level.INFO, "process.addTheArtifact.d");
 
         } catch (TskCoreException ex) {
-logger.log(Level.INFO, "process.addTheArtifact.e");
             logger.log(Level.SEVERE, "Failed to create blackboard artifact", ex);
             artifactID = -1;
             attributeID = -1;
